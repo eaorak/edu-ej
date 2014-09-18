@@ -1,11 +1,11 @@
 package com.ej.patterns.fault;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class FaultMessageGenerator {
 
-	private final List<IFaultListener> listeners = new ArrayList<IFaultListener>();
+	private final Set<IFaultListener> listeners = new TreeSet<IFaultListener>(new ListenerComparator());
 
 	public void faulted(Fault fault) {
 		for (IFaultListener listener : listeners) {
@@ -23,8 +23,9 @@ public class FaultMessageGenerator {
 
 	public static void main(String[] args) {
 		FaultMessageGenerator fmg = new FaultMessageGenerator();
-		new FaultMailer(fmg);
-		new FaultLogger(fmg);
+		new FaultMailer(fmg, 1);
+		new FaultLogger(fmg, 0);
+		new FaultLogger(fmg, 1);
 		//
 		Fault fault = new Fault("OMG ! System failure.", System.currentTimeMillis());
 		fmg.faulted(fault);

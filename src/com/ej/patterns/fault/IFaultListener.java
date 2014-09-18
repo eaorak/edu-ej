@@ -4,4 +4,6 @@ public interface IFaultListener {
 
 	void faulted(Fault fault);
 
+	int priority();
+
 }
