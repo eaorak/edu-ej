@@ -2,14 +2,21 @@ package com.ej.patterns.fault;
 
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class FaultMessageGenerator {
 
 	private final Set<IFaultListener> listeners = new TreeSet<IFaultListener>(new ListenerComparator());
+	private final ExecutorService pool = Executors.newFixedThreadPool(5);
+
+	public FaultMessageGenerator() {
+	}
 
 	public void faulted(Fault fault) {
 		for (IFaultListener listener : listeners) {
-			listener.faulted(fault);
+			FaultSender sender = new FaultSender(listener, fault);
+			pool.execute(sender);
 		}
 	}
 

@@ -11,6 +11,11 @@ public class FaultLogger implements IFaultListener {
 
 	@Override
 	public void faulted(Fault fault) {
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		System.out.println("Logging ... " + fault);
 	}
 
